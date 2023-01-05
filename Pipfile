@@ -6,6 +6,10 @@ name = "pypi"
 [packages]
 fastapi = "*"
 uvicorn = {extras = ["standard"], version = "*"}
+starlette = "*"
+sqlalchemy = "*"
+flake8 = "*"
+pymongo = "*"
 
 [dev-packages]
 
