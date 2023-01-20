@@ -1,8 +1,12 @@
 import json
 
+from starlette.exceptions import HTTPException, HTTP_409_CONFLICT, HTTP_404_NOT_FOUND
+
 from ..core.controller import Controller
 from .nurse_schema import NurseBase, NurseUpdate
-from  ..helper import database
+from ..helper import database
+from ..core.media.aws_config import upload_file
+
 
 class NurseController(Controller):
     """
@@ -113,3 +117,22 @@ class NurseController(Controller):
             raise HTTPException(
                 status_code=HTTP_404_NOT_FOUND, detail="Nurse not found"
             )
+
+    def upload_photo(self, photo: bytes, id: str):
+        """
+        upload photo method is
+        used to upload a photo
+        file in to s3 amazon
+        :param logo: file to upload
+        :return url: the photo url
+        """
+        nurse = json.loads(self.find_one({"_id": id}))
+        url = upload_file(photo, nurse)
+        nurse['Photo'] = url
+        del nurse['_id']
+        print('nurse....', nurse)
+        self.edit_one({"_id": id}, nurse)
+        return {
+            'name': nurse['Name'],
+            'logo_url': url
+        }

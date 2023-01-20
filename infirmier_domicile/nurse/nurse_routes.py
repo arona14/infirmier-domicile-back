@@ -1,8 +1,9 @@
 from starlette.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, File
 
 from .nurse_controllers import NurseController
 from .nurse_schema import NurseBase, NurseUpdate
+from ..helper import database
 
 
 router = APIRouter()
@@ -69,3 +70,22 @@ async def remove_nurse(nurse_id: str):
     :return: status 204 or raise un exception (if not found)
     """
     return controller.delete_nurse(nurse_id)
+
+
+@router.post("/{nurse_id}/photo/")
+async def create_nurse_with_photo(nurse_id: str, photo: bytes = File(...)):
+    """
+    This router upload nurse photo
+    :param nurse_id: the given nurse
+    :photo: the photo file
+    :return a dict has this format
+    {
+        "id": "nurse.id",
+        "name": "nurse.name",
+        "photo": "nurse photo"
+    }
+    """
+    _id = database.to_object_id(nurse_id)
+    url = controller.upload_photo(photo=photo, id=_id)
+    # logging.info("Customer Logo " + str(url['logo_url']) + "successfully updated")
+    return url

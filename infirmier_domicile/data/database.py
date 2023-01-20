@@ -19,7 +19,7 @@ class DB(object):
         """
         client = pymongo.MongoClient(uri)
         DB.DATABASE = client[name]
-  
+
     @staticmethod
     def aggregate(collection: str, query):
         """
@@ -137,5 +137,6 @@ class DB(object):
         :return: a pymongo status
         """
         return DB.DATABASE[collection].delete_one(query)
+
 
 db = DB()

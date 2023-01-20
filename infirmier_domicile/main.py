@@ -20,4 +20,3 @@ app.add_middleware(
 
 app.add_event_handler("startup", initialize_app)
 app.include_router(api_router, prefix='/api')
-

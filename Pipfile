@@ -11,6 +11,8 @@ sqlalchemy = "*"
 flake8 = "*"
 pymongo = "*"
 pydantic = "*"
+python-multipart = "*"
+boto3 = "*"
 
 [dev-packages]
 
